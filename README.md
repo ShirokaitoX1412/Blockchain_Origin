@@ -1,6 +1,6 @@
-#TraceChain - Dairy Supply Chain 
+# TraceChain - Dairy Supply Chain 
 
-##Hệ thống truy xuất nguồn gốc sữa dựa trên công nghệ **Blockchain (Ethereum/EVM)**. Giải pháp này giúp minh bạch hóa toàn bộ hành trình sản phẩm từ trang trại đến tay người tiêu dùng.
+## Hệ thống truy xuất nguồn gốc sữa dựa trên công nghệ **Blockchain (Ethereum/EVM)**. Giải pháp này giúp minh bạch hóa toàn bộ hành trình sản phẩm từ trang trại đến tay người tiêu dùng.
 
 ---
 
