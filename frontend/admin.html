@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Quản trị TraceChain - Dairy Portal v6</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.2/ethers.umd.min.js"></script>
+    <script src="js/abi.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .role-hidden { display: none !important; }
+        .animate-fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .input-group { 
+            padding: 1rem; background-color: #f8fafc; border: 1px solid #e2e8f0; 
+            border-radius: 1rem; outline: none; transition: all 0.2s; font-size: 0.875rem; width: 100%;
+        }
+        .input-group:focus { box-shadow: 0 0 0 2px #3b82f6; }
+        .section-card { 
+            background-color: white; padding: 2rem; border-radius: 1.5rem; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-top-width: 8px; animation: fadeIn 0.4s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen font-sans">
+
+    <div id="authOverlay" class="fixed inset-0 bg-slate-900 z-50 flex flex-col items-center justify-center text-white p-6 text-center">
+        <i class="fas fa-shield-halved text-7xl text-blue-500 mb-6"></i>
+        <h2 class="text-3xl font-bold mb-4">Dairy Chain Security (Web3)</h2>
+        <p class="text-slate-400 mb-8 max-w-sm">Vui lòng kết nối MetaMask để xác thực vai trò quản trị trên Blockchain.</p>
+        <button onclick="connectAndVerify()" class="bg-blue-600 hover:bg-blue-700 px-10 py-4 rounded-2xl font-bold text-lg shadow-xl transition-all active:scale-95 flex items-center gap-3">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Logo.svg" class="w-6 h-6" alt="MetaMask Logo" title="MetaMask Logo"> 
+            KẾT NỐI VÍ
+        </button>
+    </div>
+
+    <div id="mainDashboard" class="max-w-6xl mx-auto py-12 px-4 space-y-6 hidden">
+        <header class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+                <div class="bg-blue-600 p-3 rounded-2xl text-white"><i class="fas fa-link text-2xl"></i></div>
+                <div>
+                    <h1 class="text-2xl font-black text-slate-800 tracking-tighter uppercase text-sm">TraceChain Portal v6</h1>
+                    <p id="roleTitle" class="text-blue-600 font-bold text-xs uppercase tracking-widest italic">Đang xác minh...</p>
+                </div>
+            </div>
+            <div id="adminBadge" class="bg-slate-100 px-4 py-2 rounded-xl text-[11px] font-mono text-slate-600 border border-slate-200"></div>
+        </header>
+
+        <div id="statusBox" class="hidden p-6 rounded-3xl text-center font-mono text-xs border-2 transition-all shadow-inner"></div>
+
+        <section id="section_admin" class="role-hidden section-card border-slate-800">
+            <h2 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-3"><i class="fas fa-tools"></i> CÀI ĐẶT HỆ THỐNG (ADMIN ONLY)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <input type="text" id="setup_nongDan" class="input-group" placeholder="Ví Nông Dân">
+                <input type="text" id="setup_nhaMay" class="input-group" placeholder="Ví Nhà Máy">
+                <input type="text" id="setup_vanChuyen" class="input-group" placeholder="Ví Vận Chuyển">
+                <input type="text" id="setup_nhaPhanPhoi" class="input-group" placeholder="Ví Nhà Phân Phối">
+            </div>
+            <button onclick="callSetupChain()" class="bg-slate-800 text-white px-8 py-3 rounded-xl font-bold w-full">GÁN QUYỀN TRÊN BLOCKCHAIN</button>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <section id="section_farmer" class="role-hidden section-card border-green-500">
+                <h2 class="text-lg font-bold text-green-700 mb-6 flex items-center gap-3"><i class="fas fa-cow"></i> NÔNG TRẠI</h2>
+                <div class="space-y-4">
+                    <input type="text" id="farmer_pName" class="input-group" placeholder="Tên loại sữa">
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="text" id="farmer_fName" class="input-group" placeholder="Chủ trang trại">
+                        <input type="text" id="farmer_breed" class="input-group" placeholder="Giống bò">
+                    </div>
+                    <button onclick="callFarmerWeb3()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-bold shadow-lg">KHỞI TẠO BLOCKCHAIN</button>
+                </div>
+            </section>
+
+            <section id="section_transport" class="role-hidden section-card border-orange-500">
+                <h2 class="text-lg font-bold text-orange-700 mb-6 flex items-center gap-3"><i class="fas fa-truck-fast"></i> VẬN TẢI</h2>
+                <div class="space-y-4">
+                    <input type="number" id="trans_id" class="input-group" placeholder="ID sản phẩm">
+                    <input type="text" id="trans_status" class="input-group" placeholder="Trạng thái">
+                    <input type="text" id="trans_shipNum" class="input-group" placeholder="Số vận đơn">
+                    <button onclick="callTransportWeb3()" class="w-full bg-orange-600 text-white py-4 rounded-2xl font-bold shadow-lg">XÁC NHẬN LỘ TRÌNH</button>
+                </div>
+            </section>
+        </div>
+
+        <section id="section_factory" class="role-hidden section-card border-blue-500">
+            <h2 class="text-lg font-bold text-blue-700 mb-6 flex items-center gap-3"><i class="fas fa-industry"></i> NHÀ MÁY</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="space-y-4">
+                    <input type="number" id="factory_id" class="input-group" placeholder="ID sản phẩm">
+                    <input type="text" id="factory_status" class="input-group" placeholder="Trạng thái">
+                    <input type="text" id="factory_type" class="input-group" placeholder="Loại thành phẩm">
+                </div>
+                <div class="space-y-4">
+                    <input type="text" id="factory_proc" class="input-group" placeholder="Chi tiết chế biến">
+                    <input type="text" id="factory_batch" class="input-group" placeholder="Số lô">
+                    <input type="text" id="factory_shelf" class="input-group" placeholder="HSD">
+                </div>
+                <div class="space-y-4">
+                    <input type="text" id="factory_con" class="input-group" placeholder="Kiểm tra khuẩn">
+                    <input type="text" id="factory_adu" class="input-group" placeholder="Kiểm tra tạp chất">
+                    <button onclick="callFactoryWeb3()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg h-[52px]">XÁC NHẬN CHẤT LƯỢNG</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="section_distributor" class="role-hidden section-card border-purple-500">
+            <h2 class="text-lg font-bold text-purple-700 mb-6 flex items-center gap-3"><i class="fas fa-store"></i> PHÂN PHỐI</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <input type="number" id="dist_id" class="input-group" placeholder="ID">
+                <input type="text" id="dist_status" class="input-group" placeholder="Trạng thái">
+                <input type="number" id="dist_order" class="input-group" placeholder="Đơn hàng #">
+                <input type="number" id="dist_returned" class="input-group" placeholder="Số lượng trả">
+                <input type="text" id="dist_billing" class="input-group" placeholder="Hóa đơn">
+                <input type="text" id="dist_con" class="input-group" placeholder="Kiểm định">
+                <button onclick="callDistributorWeb3()" class="lg:col-span-3 bg-purple-600 text-white py-4 rounded-2xl font-bold shadow-lg">XÁC NHẬN NHẬP KHO</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const ROLES = {
+            FARMER: "0x821620D0f62a9DE83bB5fD48a09e88C451E1234A".toLowerCase(),
+            FACTORY: "0x2764b4f976dee087253eaecd2cef325107d63bf9".toLowerCase(),
+            TRANSPORT: "0xA139F1A08c0DAe139fED3095e4efC13B6fa2bbfF".toLowerCase(),
+            DISTRIBUTOR: "0x5b5e5f43b6d8b6f54a3e79e258f57820dde13e5e".toLowerCase(),
+            ADMIN: "0xc1739e6c4d8625d5c985172da6b54d27a6fcabc9".toLowerCase()
+        };
+
+        let signer, contract;
+
+        async function connectAndVerify() {
+            if (!window.ethereum) return alert("Cài MetaMask!");
+            const provider = new ethers.BrowserProvider(window.ethereum);
+            signer = await provider.getSigner();
+            const userWallet = (await signer.getAddress()).toLowerCase();
+
+            document.getElementById('authOverlay').style.display = 'none';
+            document.getElementById('mainDashboard').classList.remove('hidden');
+            document.getElementById('adminBadge').innerText = userWallet;
+            contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+            const title = document.getElementById('roleTitle');
+            if (userWallet === ROLES.FARMER) {
+                document.getElementById('section_farmer').classList.remove('role-hidden');
+                title.innerText = "VAI TRÒ: NÔNG DÂN";
+            } else if (userWallet === ROLES.FACTORY) {
+                document.getElementById('section_factory').classList.remove('role-hidden');
+                title.innerText = "VAI TRÒ: NHÀ MÁY";
+            } else if (userWallet === ROLES.TRANSPORT) {
+                document.getElementById('section_transport').classList.remove('role-hidden');
+                title.innerText = "VAI TRÒ: VẬN CHUYỂN";
+            } else if (userWallet === ROLES.DISTRIBUTOR) {
+                document.getElementById('section_distributor').classList.remove('role-hidden');
+                title.innerText = "VAI TRÒ: NHÀ PHÂN PHỐI";
+            } else if (userWallet === ROLES.ADMIN) {
+                document.querySelectorAll('section').forEach(s => s.classList.remove('role-hidden'));
+                title.innerText = "VAI TRÒ: TỔNG QUẢN TRỊ";
+            }
+        }
+
+        async function executeTransaction(methodName, args) {
+            const statusBox = document.getElementById('statusBox');
+            statusBox.className = "p-6 rounded-3xl text-center bg-blue-50 text-blue-600 block border-blue-200 animate-pulse";
+            statusBox.innerText = "Đang ký giao dịch...";
+            try {
+                const tx = await contract[methodName](...args);
+                statusBox.innerText = "Đang xác thực trên Blockchain...";
+                const receipt = await tx.wait(); //
+
+                statusBox.className = "p-6 rounded-3xl text-center bg-green-50 text-green-700 block border-green-200 animate-none";
+                
+                let qrContent = "";
+                // Nếu là khởi tạo sản phẩm, tạo mã QR
+                if (methodName === 'createProduct') {
+                    const prodId = await contract.productCount();
+                    const scanUrl = `${window.location.origin}/index.html?id=${prodId}`;
+                    qrContent = `
+                        <div class="mt-4 flex flex-col items-center gap-3 bg-white p-4 rounded-2xl shadow-sm border border-green-100 mx-auto max-w-[200px]">
+                            <p class="text-[10px] font-bold text-slate-500 uppercase">Mã QR Sản phẩm ID: ${prodId}</p>
+                            <div id="qrcode" class="border-4 border-white shadow-sm"></div>
+                            <a href="${scanUrl}" target="_blank" class="text-blue-500 hover:underline text-[10px] font-bold">Mở trang tra cứu</a>
+                        </div>
+                    `;
+                    statusBox.innerHTML = `<b>THÀNH CÔNG!</b><br><small class="text-[9px]">HASH: ${receipt.hash}</small>${qrContent}`;
+                    
+                    // Khởi tạo thư viện QR
+                    new QRCode(document.getElementById("qrcode"), {
+                        text: scanUrl,
+                        width: 120,
+                        height: 120
+                    });
+                } else {
+                    statusBox.innerHTML = `<b>THÀNH CÔNG!</b><br><small class="text-[9px]">HASH: ${receipt.hash}</small>`;
+                }
+            } catch (e) {
+                statusBox.className = "p-6 rounded-3xl text-center bg-red-50 text-red-700 block border-red-200 animate-none";
+                statusBox.innerText = "LỖI: " + (e.reason || e.message);
+            }
+        }
+
+        function callSetupChain() {
+            executeTransaction('setupChain', [
+                document.getElementById('setup_nongDan').value,
+                document.getElementById('setup_nhaMay').value,
+                document.getElementById('setup_vanChuyen').value,
+                document.getElementById('setup_nhaPhanPhoi').value
+            ]);
+        }
+
+        function callFarmerWeb3() {
+            executeTransaction('createProduct', [
+                document.getElementById('farmer_pName').value,
+                document.getElementById('farmer_fName').value,
+                document.getElementById('farmer_breed').value
+            ]); 
+        }
+
+        function callFactoryWeb3() {
+            executeTransaction('updateByFactory', [
+                document.getElementById('factory_id').value,
+                document.getElementById('factory_status').value,
+                document.getElementById('factory_proc').value,
+                document.getElementById('factory_type').value,
+                document.getElementById('factory_shelf').value,
+                document.getElementById('factory_batch').value,
+                document.getElementById('factory_con').value,
+                document.getElementById('factory_adu').value
+            ]);
+        }
+
+        function callTransportWeb3() {
+            executeTransaction('updateByTransport', [
+                document.getElementById('trans_id').value,
+                document.getElementById('trans_status').value,
+                document.getElementById('trans_shipNum').value,
+                "Xe chuyen dung 01", "Tuyen Bac - Nam"
+            ]);
+        }
+
+        function callDistributorWeb3() {
+            executeTransaction('updateByDistributor', [
+                document.getElementById('dist_id').value,
+                document.getElementById('dist_status').value,
+                document.getElementById('dist_order').value,
+                document.getElementById('dist_returned').value,
+                document.getElementById('dist_billing').value,
+                document.getElementById('dist_con').value
+            ]);
+        }
+
+        if (window.ethereum) window.ethereum.on('accountsChanged', () => window.location.reload());
+    </script>
+</body>
+</html>
