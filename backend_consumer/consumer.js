@@ -1,37 +1,64 @@
 require('dotenv').config();
 const express = require('express');
-const { ethers } = require('ethers'); // Import trực tiếp từ ethers v6
+const { ethers } = require('ethers'); 
 const cors = require('cors');
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-// SỬA LỖI TẠI ĐÂY: Trong v6 không dùng .providers
-const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
-const contractABI = require("./abi.json");
-const contract = new ethers.Contract(process.env.CONTRACT_ADDRESS, contractABI, provider);
+// 1. Kiểm tra biến môi trường trước khi khởi tạo
+const RPC_URL = process.env.RPC_URL || "https://ethereum-sepolia-rpc.publicnode.com";
+const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS;
 
+if (!CONTRACT_ADDRESS) {
+    console.error("❌ LỖI: CONTRACT_ADDRESS chưa được cấu hình trong Environment Variables!");
+}
+
+// 2. Thiết lập kết nối Blockchain
+const provider = new ethers.JsonRpcProvider(RPC_URL);
+const contractABI = require("./abi.json");
+
+// Khởi tạo contract (Thêm kiểm tra để tránh lỗi target=null trên Render)
+let contract;
+if (CONTRACT_ADDRESS) {
+    contract = new ethers.Contract(CONTRACT_ADDRESS, contractABI, provider);
+}
+
+// 3. API truy xuất thông tin sản phẩm
 app.get('/api/product/:id', async (req, res) => {
+    const productId = req.params.id;
+
+    if (!contract) {
+        return res.status(500).json({ success: false, error: "Server chưa cấu hình Contract Address" });
+    }
+
     try {
-        // Hàm getFullHistory là hàm view (read-only) nên dùng được bình thường
-        const historyText = await contract.getFullHistory(req.params.id);
+        // Gọi hàm từ Smart Contract
+        const historyText = await contract.getFullHistory(productId);
+        
+        // Tách chuỗi theo dòng và loại bỏ dòng trống
         const lines = historyText.split('\n').filter(line => line.trim() !== "");
         
-        if (lines.length === 0) throw new Error("Sản phẩm chưa có dữ liệu");
+        if (lines.length === 0) {
+            return res.status(404).json({ success: false, error: "Sản phẩm chưa có dữ liệu trên Blockchain" });
+        }
 
-        // Tách tên sản phẩm (Dòng 0)
+        // Tách tên sản phẩm (Giả sử dòng đầu tiên là: "Sản phẩm: Tên")
         const productName = lines[0].replace("Sản phẩm: ", "").trim();
         
-        // Xử lý Timeline (Dòng 1 trở đi)
+        // Xử lý Timeline từ dòng thứ 2 trở đi
         const timelineData = lines.slice(1).map(line => {
+            // Cấu trúc mong đợi: "[Thời gian] Trạng thái: Chi tiết"
             const timePart = line.substring(line.indexOf("[") + 1, line.indexOf("]")); 
-            const actionPart = line.substring(line.indexOf("] ") + 2); 
+            const rest = line.substring(line.indexOf("] ") + 2); 
+            const status = rest.split(':')[0].trim();
+            const detail = rest.includes(':') ? rest.split(':').slice(1).join(':').trim() : rest;
 
             return {
                 thoiGian: timePart,
-                chiTiet: actionPart, 
-                trangThai: actionPart.split(':')[0].trim() 
+                trangThai: status,
+                chiTiet: detail
             };
         });
 
@@ -45,14 +72,16 @@ app.get('/api/product/:id', async (req, res) => {
         console.error("Lỗi Consumer API:", error);
         res.status(500).json({ 
             success: false, 
-            error: "ID sản phẩm không tồn tại hoặc lỗi kết nối Blockchain!" 
+            error: "Không tìm thấy ID sản phẩm hoặc lỗi kết nối mạng lưới!" 
         });
     }
 });
 
-const PORT = 3000;
+// 4. Khởi chạy Server
+const PORT = process.env.PORT || 3000; // Render sẽ cấp Port tự động qua biến môi trường
 app.listen(PORT, () => {
     console.log(`-----------------------------------------`);
-    console.log(`Consumer API v6 chạy tại: http://localhost:${PORT}`);
+    console.log(`🚀 TraceChain API đang chạy tại Port: ${PORT}`);
+    console.log(`📍 Contract: ${CONTRACT_ADDRESS || "CHƯA CẤU HÌNH"}`);
     console.log(`-----------------------------------------`);
 });
