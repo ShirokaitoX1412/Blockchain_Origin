@@ -22,15 +22,29 @@ Dự án sử dụng **Smart Contract** để lưu trữ dữ liệu không th�
 
 ### 🔐 Phân quyền vai trò (RBAC)
 Hệ thống tự động nhận diện vai trò dựa trên địa chỉ ví MetaMask:
+<img width="344" height="357" alt="{8872D8F5-594C-4975-829C-30964CFE1EC4}" src="https://github.com/user-attachments/assets/9879a307-9a58-4f86-a29b-c4d74060d7c7" />
+
 * **Tổng quản trị (Admin):** Gán quyền cho các thành viên trong chuỗi cung ứng.
+  <img width="842" height="743" alt="{CB245594-300E-4E63-915B-13F3CBDC8114}" src="https://github.com/user-attachments/assets/a7769fff-524c-4feb-81ed-7035c618f4f3" />
+
 * **Nông dân (Farmer):** Khởi tạo sản phẩm, nhập giống bò, chủ trang trại.
+  <img width="560" height="435" alt="{CFD08C1A-5284-4D6A-AB49-1FF306468EB5}" src="https://github.com/user-attachments/assets/cd909b60-1b4e-4e11-b623-f8aa786837e5" />
+
 * **Nhà máy (Factory):** Cập nhật quy trình chế biến, kiểm định chất lượng, hạn sử dụng.
+  <img width="988" height="409" alt="{C1791AE1-2FBB-4C00-BB9B-05D262428A3B}" src="https://github.com/user-attachments/assets/97f03f3c-48d0-4b77-8010-ca538d7a9868" />
+
 * **Vận tải (Transport):** Cập nhật số vận đơn, lộ trình vận chuyển.
+  <img width="480" height="464" alt="{EF3EC00A-BC33-44DC-844B-7392347EFB12}" src="https://github.com/user-attachments/assets/337b5ea7-6b0c-41e5-9d8b-e8aad0f49f75" />
+
 * **Nhà phân phối (Distributor):** Xác nhận nhập kho, kiểm định tại chỗ, hóa đơn.
+  <img width="1185" height="485" alt="{C23BA152-26F3-456C-830D-CC94D7495679}" src="https://github.com/user-attachments/assets/637cf2a7-05ed-4e63-9793-d096b11c36b6" />
+
 
 ### 🔍 Truy xuất & QR Code
 * **Tạo mã QR tự động:** Sinh mã QR chứa URL tra cứu ngay sau khi nông dân tạo sản phẩm thành công.
+  
 * **Tra cứu không cần ví:** Người tiêu dùng có thể xem lịch sử Blockchain mà không cần cài đặt MetaMask.
+<img width="723" height="734" alt="{C76EE994-30D8-43C5-9F97-458FBDC65500}" src="https://github.com/user-attachments/assets/d1034731-f3ef-4160-8182-051cf872d9f5" />
 
 ---
 
