@@ -1,6 +1,6 @@
-TraceChain - Dairy Supply Chain 
+#TraceChain - Dairy Supply Chain 
 
-Hệ thống truy xuất nguồn gốc sữa dựa trên công nghệ **Blockchain (Ethereum/EVM)**. Giải pháp này giúp minh bạch hóa toàn bộ hành trình sản phẩm từ trang trại đến tay người tiêu dùng.
+##Hệ thống truy xuất nguồn gốc sữa dựa trên công nghệ **Blockchain (Ethereum/EVM)**. Giải pháp này giúp minh bạch hóa toàn bộ hành trình sản phẩm từ trang trại đến tay người tiêu dùng.
 
 ---
 
@@ -51,7 +51,7 @@ Thư mục `backend_consumer` đóng vai trò là cầu nối giữa Blockchain 
 ### C. Cấu hình kết nối Web3
 Mở file `js/abi.js` và cập nhật thông tin từ Remix IDE:
 * **CONTRACT_ADDRESS:** Địa chỉ Contract sau khi Deploy thành công.
-* **CONTRACT_ABI:** Mảng JSON ABI (Lưu ý xóa bỏ các cặp ngoặc vuông thừa, chỉ giữ lại định dạng `[...]`).
+* **CONTRACT_ABI:** Mảng JSON ABI 
 
 ---
 
