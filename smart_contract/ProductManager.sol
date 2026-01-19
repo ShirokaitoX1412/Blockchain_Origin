@@ -29,7 +29,7 @@ contract ProductManager is Roles, DairyData {
         string memory _pType,
         string memory _shelfLife,
         string memory _batchNum,
-        string memory _conLog, 
+        string memory _ipfsHash, // Đổi tên gợi nhớ cho tham số IPFS
         string memory _aduLog
     ) public onlyFactory {
         require(products[_id].isExists, unicode"Sản phẩm không tồn tại");
@@ -41,17 +41,19 @@ contract ProductManager is Roles, DairyData {
         p.productType = _pType;
         p.shelfLife = _shelfLife;
         p.batchNumber = _batchNum;
-        p.contaminationLog = _conLog;
+        p.contaminationLog = _ipfsHash; // Lưu mã CID vào đây
         p.adulterationLog = _aduLog;
         p.currentState = State.Factory;
 
+        // Sửa Log Content để chứa mã IPFS phân tách bởi dấu "|"
         string memory logContent = string(abi.encodePacked(
             unicode"Nhà máy: ", _pType, 
             unicode" | HSD: ", _shelfLife, 
-            unicode" | Lô: ", _batchNum
+            unicode" | Lô: ", _batchNum,
+            unicode" | ", _ipfsHash // Frontend sẽ quét thấy "Qm..." ở đây
         ));
         _addLog(_id, logContent, unicode"Nhà máy");
-    }
+}
 
     function updateByTransport(
         uint256 _id, 
