@@ -34,30 +34,37 @@ Hệ thống tự động nhận diện vai trò dựa trên địa chỉ ví Me
 * **Nông dân (Farmer):** Khởi tạo sản phẩm, nhập giống bò, chủ trang trại.
 <div align="center">
   <img width="560" height="435" alt="{CFD08C1A-5284-4D6A-AB49-1FF306468EB5}" src="https://github.com/user-attachments/assets/cd909b60-1b4e-4e11-b623-f8aa786837e5" />
+ 
 </div>
 
 * **Nhà máy (Factory):** Cập nhật quy trình chế biến, kiểm định chất lượng, hạn sử dụng.
 <div align="center">
-  <img width="988" height="409" alt="{C1791AE1-2FBB-4C00-BB9B-05D262428A3B}" src="https://github.com/user-attachments/assets/97f03f3c-48d0-4b77-8010-ca538d7a9868" />
+ <img width="1106" height="261" alt="{6E54D503-49D5-454A-BF01-EA903CE6A6BD}" src="https://github.com/user-attachments/assets/e9af878c-92d9-4880-adca-c1a9cdf7ea5b" />
+
 </div>
 
 * **Vận tải (Transport):** Cập nhật số vận đơn, lộ trình vận chuyển.
 <div align="center">
-  <img width="480" height="464" alt="{EF3EC00A-BC33-44DC-844B-7392347EFB12}" src="https://github.com/user-attachments/assets/337b5ea7-6b0c-41e5-9d8b-e8aad0f49f75" />
+ <img width="536" height="348" alt="{A08C108A-164E-4B00-B641-6B5AE9645DEB}" src="https://github.com/user-attachments/assets/04272177-b782-4009-9bee-4591cdc92951" />
+
 </div>
 
 * **Nhà phân phối (Distributor):** Xác nhận nhập kho, kiểm định tại chỗ, hóa đơn.
 <div align="center">
-  <img width="1185" height="485" alt="{C23BA152-26F3-456C-830D-CC94D7495679}" src="https://github.com/user-attachments/assets/637cf2a7-05ed-4e63-9793-d096b11c36b6" />
+ <img width="1089" height="190" alt="{D2F0242E-AA6C-4189-8EED-65F0D92FCB47}" src="https://github.com/user-attachments/assets/b0ab4b11-bcd2-425d-9c16-f5d2c5362e1d" />
+
 </div>
 
 
 ### 🔍 Truy xuất & QR Code
 * **Tạo mã QR tự động:** Sinh mã QR chứa URL tra cứu ngay sau khi nông dân tạo sản phẩm thành công.
+  <img width="236" height="212" alt="{B3106BE4-3C4D-4975-8947-35C1EBC5F494}" src="https://github.com/user-attachments/assets/b121269e-5a8c-45dd-b056-4425f1c9908d" />
+
   
 * **Tra cứu không cần ví:** Người tiêu dùng có thể xem lịch sử Blockchain mà không cần cài đặt MetaMask.
 <div align="center">
-  <img width="723" height="734" alt="{C76EE994-30D8-43C5-9F97-458FBDC65500}" src="https://github.com/user-attachments/assets/d1034731-f3ef-4160-8182-051cf872d9f5" />
+ <img width="942" height="756" alt="{9B7DFB3E-3249-46E7-ABB8-130433EBFE72}" src="https://github.com/user-attachments/assets/d0b91ee0-c6ed-4ae1-a922-7a1b8e162be2" />
+
 </div>
 
 ---
