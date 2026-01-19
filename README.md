@@ -3,6 +3,8 @@
 
 ### Hệ thống truy xuất nguồn gốc sữa dựa trên công nghệ **Blockchain (Ethereum/EVM)**. Giải pháp này giúp minh bạch hóa toàn bộ hành trình sản phẩm từ trang trại đến tay người tiêu dùng.
 
+Link admin: https://blockchain-origin-3.onrender.com/admin.html
+Link consumer: https://blockchain-origin-3.onrender.com/index.html
 
 ## 📋 Mục lục
 1. [Giới thiệu](#-giới-thiệu)
