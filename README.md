@@ -1,8 +1,7 @@
 # TraceChain - Dairy Supply Chain 
 
 
-## Hệ thống truy xuất nguồn gốc sữa dựa trên công nghệ **Blockchain (Ethereum/EVM)**. Giải pháp này giúp minh bạch hóa toàn bộ hành trình sản phẩm từ trang trại đến tay người tiêu dùng.
-This project has a minimal setup of Hardhat 3 Beta, without any plugins.
+### Hệ thống truy xuất nguồn gốc sữa dựa trên công nghệ **Blockchain (Ethereum/EVM)**. Giải pháp này giúp minh bạch hóa toàn bộ hành trình sản phẩm từ trang trại đến tay người tiêu dùng.
 
 
 ## 📋 Mục lục
@@ -58,7 +57,9 @@ Hệ thống tự động nhận diện vai trò dựa trên địa chỉ ví Me
 
 ### 🔍 Truy xuất & QR Code
 * **Tạo mã QR tự động:** Sinh mã QR chứa URL tra cứu ngay sau khi nông dân tạo sản phẩm thành công.
+  <div align="center">
   <img width="236" height="212" alt="{B3106BE4-3C4D-4975-8947-35C1EBC5F494}" src="https://github.com/user-attachments/assets/b121269e-5a8c-45dd-b056-4425f1c9908d" />
+</div>
 
   
 * **Tra cứu không cần ví:** Người tiêu dùng có thể xem lịch sử Blockchain mà không cần cài đặt MetaMask.
